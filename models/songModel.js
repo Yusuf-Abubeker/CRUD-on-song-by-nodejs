@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-
+const mongoose = require("mongoose");
+const Joi = require("joi");
 // Define the schema for the Song model
 const songSchema = new mongoose.Schema({
   title: {
@@ -18,7 +18,17 @@ const songSchema = new mongoose.Schema({
 });
 
 // Create the Song model based on the schema
-const Song = mongoose.model('Song', songSchema);
+const Song = mongoose.model("Song", songSchema);
 
-// Export the Song model for use in other parts of your application
-module.exports = Song;
+function validater(song) {
+  const schema = Joi.object({
+    title: Joi.string().required(),
+    artist: Joi.string().required(),
+    genre: Joi.string().required(),
+    releaseYear: Joi.string().required(),
+    songFile: Joi.string().required(),
+  });
+  return schema.validate(song);
+}
+module.exports.validater = validater;
+module.exports.Song = Song;

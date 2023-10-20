@@ -1,7 +1,7 @@
 const grid = require("gridfs-stream");
 const express = require("express");
 const mongoose = require("mongoose");
-const Song = require("../models/songModel");
+const { Song, validater } = require("../models/songModel");
 const multer = require("multer");
 const util = require("util");
 const path = require("path");
@@ -41,8 +41,23 @@ router.get("/songs", async (req, res) => {
     res.status(400).json({ error: "Failed to retrieve songs" });
   }
 });
-
 router.get("/songs/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (id !== null) {
+      const song = await Song.findById(id);
+      if (!song) {
+        return res.status(404).json({ error: "Song not found" });
+      }
+      res.status(201).json(song);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: "Failed to retrieve songs" });
+  }
+});
+
+router.get("/songs/:id/audio", async (req, res) => {
   try {
     const { id } = req.params;
     const song = await Song.findById(id);
@@ -77,6 +92,8 @@ router.get("/songs/:id", async (req, res) => {
 });
 
 router.post("/songs", upload.single("songFile"), async (req, res) => {
+  const { error } = validater(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
   const { title, artist, genre, releaseYear } = req.body;
 
   try {
