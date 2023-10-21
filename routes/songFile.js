@@ -44,13 +44,12 @@ router.get("/songs", async (req, res) => {
 router.get("/songs/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    if (id !== null) {
+   
       const song = await Song.findById(id);
       if (!song) {
         return res.status(404).json({ error: "Song not found" });
       }
       res.status(201).json(song);
-    }
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: "Failed to retrieve songs" });
@@ -60,6 +59,7 @@ router.get("/songs/:id", async (req, res) => {
 router.get("/songs/:id/audio", async (req, res) => {
   try {
     const { id } = req.params;
+ 
     const song = await Song.findById(id);
     if (!song) {
       return res.status(404).json({ error: "Song not found" });
@@ -117,6 +117,7 @@ router.post("/songs", upload.single("songFile"), async (req, res) => {
 
 router.put("/songs/:id", upload.single("songFile"), async (req, res) => {
   const { id } = req.params;
+  
   const { title, artist, genre, releaseYear } = req.body;
 
   try {

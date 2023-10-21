@@ -26,7 +26,7 @@ function validater(song) {
     artist: Joi.string().required(),
     genre: Joi.string().required(),
     releaseYear: Joi.string().required(),
-    songFile: Joi.string().required(),
+  
   });
   return schema.validate(song);
 }
