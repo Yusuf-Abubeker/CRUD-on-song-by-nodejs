@@ -74,6 +74,11 @@ router.get("/songs/:id/audio", async (req, res) => {
     if (!songFilePath) {
       return res.status(400).json({ error: "Song file path not found" });
     }
+    
+    // Check if the file exists
+    if (!fs.existsSync(songFilePath)) {
+      return res.status(404).json({ error: "Song file not found" });
+    }
 
     // Determine the content type based on the file extension (e.g., mp3)
     const extname = path.extname(songFilePath);
