@@ -3,9 +3,10 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const songs = require("./routes/songFile");
 const app = express();
-
+ 
+const uri = process.env.MONGODB_URI;
 mongoose
-  .connect("mongodb+srv://yusufabubeker2:SrJISxUyHtsXMDqj@cluster0.5s9ubyl.mongodb.net/?retryWrites=true&w=majority")
+  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("database connected"))
   .catch((err) => console.log("error in db connection"+ err));
 
