@@ -15,13 +15,13 @@ let gfs;
 const conn = mongoose.connection;
 conn.once("open", () => {
   gfs = grid(conn.db, mongoose.mongo);
-  gfs.collection("songFiles"); // Use a specific collection for song files
+  gfs.collection("songFiles");
 });
 
 // Set up Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "music/"); // Set the destination folder where uploaded files will be stored
+    cb(null, "music/"); 
   },
   filename: (req, file, cb) => {
     // Generate a unique filename for the uploaded file (e.g., use the song's title or a random string)
@@ -44,12 +44,14 @@ router.get("/songs", async (req, res) => {
 router.get("/songs/:id", async (req, res) => {
   try {
     const { id } = req.params;
-   
-      const song = await Song.findById(id);
-      if (!song) {
-        return res.status(404).json({ error: "Song not found" });
-      }
-      res.status(201).json(song);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return null;
+    }
+    const song = await Song.findById(id);
+    if (!song) {
+      return res.status(404).json({ error: "Song not found" });
+    }
+    res.status(201).json(song);
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: "Failed to retrieve songs" });
@@ -59,7 +61,9 @@ router.get("/songs/:id", async (req, res) => {
 router.get("/songs/:id/audio", async (req, res) => {
   try {
     const { id } = req.params;
- 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return null;
+    }
     const song = await Song.findById(id);
     if (!song) {
       return res.status(404).json({ error: "Song not found" });
@@ -117,7 +121,9 @@ router.post("/songs", upload.single("songFile"), async (req, res) => {
 
 router.put("/songs/:id", upload.single("songFile"), async (req, res) => {
   const { id } = req.params;
-  
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return null;
+  }
   const { title, artist, genre, releaseYear } = req.body;
 
   try {
