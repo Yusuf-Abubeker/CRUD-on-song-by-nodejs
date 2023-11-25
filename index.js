@@ -10,7 +10,13 @@ mongoose
   .then(() => console.log("database connected"))
   .catch((err) => console.log("error in db connection"+ err));
 
-app.use(cors({ origin: "http://localhost:5173" }));
+const allowedOrigins = ["https://song-hub.vercel.app", "http://localhost:5173"];
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
+
 app.use(express.json());
 
 app.use("/yusuf", songs);
