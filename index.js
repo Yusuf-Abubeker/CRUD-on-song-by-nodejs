@@ -5,7 +5,7 @@ const songs = require("./routes/songFile");
 const app = express();
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/mysongs")
+  .connect("mongodb+srv://yusufabubeker2:SrJISxUyHtsXMDqj@cluster0.5s9ubyl.mongodb.net/?retryWrites=true&w=majority")
   .then(() => console.log("database connected"))
   .catch((err) => console.log("error in db connection"+ err));
 
