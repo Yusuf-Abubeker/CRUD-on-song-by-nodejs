@@ -167,7 +167,7 @@ router.delete("/songs/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const song = await Song.findById(id).exec();
+    const song = await Song.findById(id);
 
     if (!song) {
       return res.status(404).json({ error: "Song not found" });
@@ -182,7 +182,7 @@ router.delete("/songs/:id", async (req, res) => {
     }
 
     // Delete the song document from the database
-    await Song.findByIdAndDelete(id).exec();
+    await Song.findByIdAndDelete(id);
 
     res.status(204).json("successfullly deleted"); // Successfully deleted
   } catch (error) {
